@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
+<html>
+<!--    
+/**
+ * @title automatic SWFobject powered HTML loader for large numbers of lonely SWFs
+ * @author Matt Gleeson <matt@mattgleeson.net>
+ * @version 1.0
+ * @usage 1) useCase 1, 1 or few SWFs: make a copy and rename the filename of this file to the same (pre-extension) filename as the SWF file you want to run  and point your browser at this file - note both swf and this file must be in the same directory
+ * @usage 2) useCase 2, for large numbers of lonely SWFs: run makeSwfList.bat to create list textfile, then run makeHTMs_for_SWFs.bat to create matching html loader files for each swf, process done!!
+ * 
+*/ 
+-->
+<head>
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+  <title></title>
+  <style type='text/css'>
+    html {
+      height: 100%;
+      overflow: hidden;
+      /* Hides scrollbar in IE */
+    }
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    #mySWF {
+      display: block;
+      height: 100%;
+    }
+  </style>
+  <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js'></script>
+  <script type='text/javascript'>
+  </script>
+  <script type='text/javascript'>
+  
+    function getThisFileName() {  
+      var file_name = document.location.href;
+      var end = (file_name.indexOf("?") == -1) ? file_name.length : file_name.indexOf("?");
+      return file_name.substring(file_name.lastIndexOf("/") + 1, end);
+    }
+
+    function getFlashMovieObject(movieName) {
+      if (window.document[movieName]) {
+        return window.document[movieName];
+      }
+      if (navigator.appName.indexOf("Microsoft Internet") == -1) {
+        if (document.embeds && document.embeds[movieName])
+          return document.embeds[movieName];
+      } else // if (navigator.appName.indexOf("Microsoft Internet")!=-1)
+      {
+        return document.getElementById(movieName);
+      }
+    }
+
+    var thisFileName = getThisFileName();
+    var swfFileName = thisFileName.split('.');
+    swfFileName[0] = swfFileName[0] + ".swf";
+
+    var flashvars = {};
+    var parameters = {};
+    parameters.allowfullscreen = 'true';
+    parameters.loop = 'false';
+    parameters.play = 'true';
+    var attributes = {};
+    attributes.align = 'right';
+    attributes.name = 'mySWF';
+    swfobject.embedSWF(swfFileName[0], 'mySWF', '80%', '80%', '9.0.0', false, flashvars, parameters, attributes); //change these if you want to - I'll implement them as "runtime setable" via optional query string vars in future or something
+  </script>
+
+</head>
+
+<body>
+
+  <div id='mySWF' onclick="getFlashMovieObject('mySWF').Play()">
+    <p>This page requires Adobe Flash Player, which you can download free at <a href="http://get.adobe.com/flashplayer/">http://get.adobe.com/flashplayer/</a>
+    </p>
+  </div>
+  <button onclick="getFlashMovieObject('mySWF').Play()">Click here to start playback</button>
+
+
+</body>
+
+</html>
